@@ -13,7 +13,8 @@ def hello_world():
 
 @app.route(f"/device_create/", methods=['GET'])
 def device_create():
-    return render_template('deivce_create.html')
+    print('create')
+    return render_template('device_create.html')
 
 
 @app.route(f"/device_lookup/", methods=['GET'])
