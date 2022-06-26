@@ -2,6 +2,7 @@ import re
 from settings import *
 from flask import Flask, render_template, request
 from db import insert_device, select_device
+from jinja2.exceptions import TemplateNotFound
 
 app = Flask(__name__)
 
@@ -11,16 +12,23 @@ def hello_world():
     return "<p>Hello World!</p>"
 
 
-@app.route(f"/device_create/", methods=['GET'])
-def device_create():
-    print('create')
-    return render_template('device_create.html')
+# @app.route(f"/device_create/", methods=['GET'])
+# def device_create():
+#     return render_template('device_create.html')
 
 
-@app.route(f"/device_lookup/", methods=['GET'])
-def device_lookup():
-    return render_template('device_lookup.html')
+# @app.route(f"/device_lookup/", methods=['GET'])
+# def device_lookup():
+#     return render_template('device_lookup.html')
 
+
+@app.route(f"/device_<action>/", methods=['GET'])
+def device_form(action):
+    try:
+        return render_template(f'device_{action}.html')
+    except TemplateNotFound as error:
+        print(f'Template error: {error}')
+        return "<p>oops this page doesn't exist</p>"
 
 @app.route("/device/", methods=['GET', 'POST', 'PUT'])
 def device():
