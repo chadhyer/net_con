@@ -14,20 +14,20 @@ def create_table_device() -> None:
             label TEXT,
             location TEXT,
             serial BLOB,
-            ip BLOB,
+            host BLOB,
             mac BLOB
         );
         ''')
     connection.close()
 
 
-def insert_device(label:str, location:str, serial:str, ip:str, mac:str):
+def insert_device(label:str, location:str, serial:str, host:str, mac:str):
     connection = sqlite3.connect(DATABASE_FILE)
     cursor = connection.cursor()
     cursor.execute(
         f'''
-        INSERT INTO device ( label, location, serial, ip, mac )
-        VALUES ( '{label}', '{location}', '{serial}', '{ip}', '{mac}' );'''
+        INSERT INTO device ( label, location, serial, host, mac )
+        VALUES ( '{label}', '{location}', '{serial}', '{host}', '{mac}' );'''
     )
     connection.commit()
     connection.close()
