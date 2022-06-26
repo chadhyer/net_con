@@ -1,5 +1,5 @@
 from settings import *
-from flask import Flask, redirect, url_for, request
+from flask import Flask, redirect, render_template, url_for, request
 
 app = Flask(__name__)
 
@@ -9,9 +9,21 @@ def hello_world():
   return "<p>Hello World!</p>"
 
 
-@app.route(f"/device/", methods=['GET'])
-def get_device_all(dev_id):
-  pass
+@app.route(f"/device_lookup/", methods=['GET'])
+def device_lookup():
+  return render_template('device_lookup.html')
+
+
+@app.route("/device/", methods=['GET'])
+def device():
+  if request.method == 'POST':
+    if request.form['submit'] == 'lookup':
+      print('lookup')
+    if request.form['submit'] == 'save':
+      print('save')
+    print('post')
+  if request.method == 'GET':
+    print('get')
 
 
 @app.route(f"/device/<dev_id>", methods=['GET'])
@@ -26,4 +38,4 @@ def get_device_health(dev_id):
   pass
 
 if __name__ == '__main__':
-  app.run(debug = DEBUG)
+  app.run(debug = True)
