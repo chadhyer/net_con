@@ -39,6 +39,8 @@ def device():
 
     if request.method == 'GET':
         key = request.args.get('key', None)
+        if key == 'None':
+          key = None
         value = request.args.get('value', None)
         device_list = select_device(key, value)
         return render_template('device_query.html', device_list=device_list)
