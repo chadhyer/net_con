@@ -28,19 +28,20 @@ def device():
         label = request.form.get('label', None)
         location = request.form.get('location', None)
         serial = request.form.get('serial', None)
-        ip = request.form.get('ip', None)
+        host = request.form.get('host', None)
         mac = request.form.get('mac', None)
         insert_device(label=label, 
                       location=location,
                       serial=serial,
-                      ip=ip,
+                      host=host,
                       mac=mac)
         return "<p>Device added</p>"
 
     if request.method == 'GET':
-        print('get')
-        device_list = select_device()
-        return 
+        value = request.form.get('key', None)
+        key = request.form.get('value', None)
+        device_list = select_device(value, key)
+        return render_template('device_query.html', device_list=device_list)
 
 
 @app.route(f"/device/<dev_id>", methods=['GET'])
