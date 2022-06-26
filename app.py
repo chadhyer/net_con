@@ -38,9 +38,9 @@ def device():
         return "<p>Device added</p>"
 
     if request.method == 'GET':
-        value = request.form.get('key', None)
-        key = request.form.get('value', None)
-        device_list = select_device(value, key)
+        key = request.args.get('key', None)
+        value = request.args.get('value', None)
+        device_list = select_device(key, value)
         return render_template('device_query.html', device_list=device_list)
 
 
