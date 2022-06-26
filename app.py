@@ -45,12 +45,39 @@ def device():
         device_list = select_device(key, value)
         return render_template('device_query.html', device_list=device_list)
 
+    if request.method == 'PUT':
+        print('put')
+        return "<p>put would be here</p>"
 
-@app.route(f"/device/<dev_id>", methods=['GET'])
-def get_device(dev_id):
-    content = request.get_json
-    print(content)
-    return dev_id
+
+@app.route(f"/device/id/<dev_id>/", methods=['GET'])
+def get_device_id(dev_id):
+    device_list = select_device('id', dev_id)
+    return render_template('device_query.html', device_list=device_list)
+
+
+@app.route(f"/device/location/<location>/", methods=['GET'])
+def get_device_location(location):
+    device_list = select_device('location', location)
+    return render_template('device_query.html', device_list=device_list)
+
+
+@app.route(f"/device/serial/<serial>/", methods=['GET'])
+def get_device_serial(serial):
+    device_list = select_device('serial', serial)
+    return render_template('device_query.html', device_list=device_list)
+
+
+@app.route(f"/device/host/<host>/", methods=['GET'])
+def get_device_host(host):
+    device_list = select_device('host', host)
+    return render_template('device_query.html', device_list=device_list)
+
+
+@app.route(f"/device/mac/<mac>/", methods=['GET'])
+def get_device_mac(mac):
+    device_list = select_device('mac', mac)
+    return render_template('device_query.html', device_list=device_list)
 
 
 @app.route(f"/device/<dev_id>/status/", methods=['GET'])
