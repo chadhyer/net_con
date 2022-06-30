@@ -7,21 +7,6 @@ from jinja2.exceptions import TemplateNotFound
 app = Flask(__name__)
 
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello World!</p>"
-
-
-# @app.route(f"/device_create/", methods=['GET'])
-# def device_create():
-#     return render_template('device_create.html')
-
-
-# @app.route(f"/device_lookup/", methods=['GET'])
-# def device_lookup():
-#     return render_template('device_lookup.html')
-
-
 @app.route(f"/device_<action>/", methods=['GET'])
 def device_form(action):
     try:
@@ -29,6 +14,7 @@ def device_form(action):
     except TemplateNotFound as error:
         print(f'Template error: {error}')
         return "<p>oops this page doesn't exist</p>"
+
 
 @app.route("/device/", methods=['GET', 'POST', 'PUT'])
 def device():
