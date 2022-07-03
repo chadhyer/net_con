@@ -9,6 +9,11 @@ app = Flask(__name__)
 
 @app.route(f"/device_<action>/", methods=['GET'])
 def device_form(action):
+    """Takes user to specified device_<action> template html forum
+
+    /device_create/: Takes user to a form to insert a new device into the database
+    /device_lookup/: Takes user to a form to search device info from the database
+    """
     try:
         return render_template(f'device_{action}.html')
     except TemplateNotFound as error:
@@ -18,6 +23,12 @@ def device_form(action):
 
 @app.route("/device/", methods=['GET', 'POST', 'PUT'])
 def device():
+    """Endpoint facilitates database interaction
+    
+    GET request allows a device query
+    POST request allows a device record to be inserted
+    PUT request allows a device record to be updated (not available yet)
+    """
     if request.method == 'POST':
         label = request.form.get('label', None)
         location = request.form.get('location', None)
@@ -46,12 +57,24 @@ def device():
 
 @app.route(f"/device/<column>/<value>/", methods=['GET'])
 def get_device_by_column(column, value):
+    """Endpoint allows user to execute SELECT query with WHERE clause
+
+    Where:
+    <column> = Column name for WHERE clause
+    <value> = value for WHERE clause
+    """
     device_list = select_device(column, value)
     return render_template('device_query.html', device_list=device_list)
 
 
 @app.route(f"/device/<column>/<value>/status/", methods=['GET'])
 def get_device_health_by_column(column, value):
+    """Pull device health stats via SSH for devices that match search query
+
+    Where:
+    <column> = Column name for WHERE clause
+    <value> = value for WHERE clause
+    """
     device_list = select_device(column, value)
     pass
 
