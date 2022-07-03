@@ -3,6 +3,7 @@ from settings import *
 from flask import Flask, render_template, request
 from db import insert_device, select_device
 from jinja2.exceptions import TemplateNotFound
+from ssh import check_interfaces
 
 app = Flask(__name__)
 
@@ -69,15 +70,38 @@ def get_device_by_column(column, value):
 
 @app.route(f"/device/<column>/<value>/status/", methods=['GET'])
 def get_device_health_by_column(column, value):
-    """Pull device health stats via SSH for devices that match search query
+    """Pull device interface status via SSH for devices that match search query
 
     Where:
     <column> = Column name for WHERE clause
     <value> = value for WHERE clause
     """
-    device_list = select_device(column, value)
-    pass
+    if value == 'all':
+            device_list = select_device(column, value)
+    else:
+        device_list = select_device(column, value)
 
+    device_interface_list = []
+
+    for device in device_list:
+        device_info = {}
+        device_info['id'] = device[0]
+        device_info['label'] = device[1]
+        device_info['location'] = device[2]
+        device_info['serial'] = device[3]
+        device_info['host'] = device[4]
+        device_info['mac'] = device[5]
+
+        try:
+            data = check_interfaces(host=device[4], user=SSH['USERNAME'],
+                                    rsa_key_file=SSH['RSA_KEY_FILE'])
+        except:
+            data = [{'ifname': 'Unavailable'}]
+        device_info['interfaces'] = data
+
+        device_interface_list.append(device_info)
+
+    return render_template('device_interface.html', device_interface_list=device_interface_list)
 
 if __name__ == '__main__':
     app.run(debug = True)

@@ -1,0 +1,49 @@
+<html>
+    <body>
+        <h1>Device Interface Status Query</h1>
+        {% for device in device_interface_list %}
+        <table style="width:100%">
+            <th>Device Info</th>
+            <tr>
+                <td>ID</td>
+                <td>Label</td>
+                <td>Location</td>
+                <td>Serial</td>
+                <td>Host</td>
+                <td>MAC Address</td>
+            </tr>
+            <tr>
+                <td>{{device.id}}</td>
+                <td>{{device.label}}</td>
+                <td>{{device.location}}</td>
+                <td>{{device.serial}}</td>
+                <td>{{device.host}}</td>
+                <td>{{device.mac}}</td>
+            </tr>
+        </table>
+        <table style="width:100%">
+            <th>Device Interface Info</th>
+            <tr>
+                <td>Name</td>
+                <td>Flags</td>
+                <td>MTU</td>
+                <td>Operstate</td>
+                <td>Link Mode</td>
+                <td>Link Type</td>
+                <td>Mac Address</td>
+            </tr>
+            {% for interface in device.interfaces %}
+            <tr>
+                <td>{{interface.ifname}}</td>
+                <td>{{interface.flags}}</td>
+                <td>{{interface.mtu}}</td>
+                <td>{{interface.operstate}}</td>
+                <td>{{interface.linkmode}}</td>
+                <td>{{interface.link_type}}</td>
+                <td>{{interface.address}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endfor %}
+    </body>
+</html>
