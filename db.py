@@ -1,3 +1,22 @@
+"""
+DB Supporting functions live here.
+
+File can be executed as a script with the following parameters:
+
+-C --create-db      | Creates a new Sqlite3 database named device.db with the device table
+
+-c --column         | Determine what column to use in the WHERE clause of a SELECT query
+
+-v --value          | Determine what value to use in the WHERE clause of a SELECT query
+
+-i --insert         | Change to INSERT mode to insert a new device into the database
+                      $1 = label for device
+                      $2 = location device is installed
+                      $3 = serial identifier for device
+                      $4 = host/ip address for device
+                      $5 = mac address for device
+"""
+
 import sqlite3
 import json
 from settings import DATABASE_FILE
@@ -5,6 +24,10 @@ from sys import exit, argv
 
 
 def create_table_device() -> None:
+    """Create Sqlite3 database file and device table
+
+       Name of database determined by DATABASE_FILE variable in settings.py
+    """
     connection = sqlite3.connect(DATABASE_FILE)
     cursor = connection.cursor()
     cursor.execute(
@@ -21,7 +44,17 @@ def create_table_device() -> None:
     connection.close()
 
 
-def insert_device(label:str, location:str, serial:str, host:str, mac:str):
+def insert_device(label:str, location:str, serial:str, host:str, mac:str) -> None:
+    """Insert device into device table of the Sqlite3 file DATABASE_FILE
+    
+    Parameters
+    ----------
+    label (str): label for device
+    location  (str): location device is installed
+    serial  (str): serial identifier for device
+    host  (str): host/ip address for device
+    mac  (str): mac address for device
+    """
     connection = sqlite3.connect(DATABASE_FILE)
     cursor = connection.cursor()
     cursor.execute(
@@ -34,6 +67,17 @@ def insert_device(label:str, location:str, serial:str, host:str, mac:str):
 
 
 def select_device(column=None, value=None) -> list:
+    """Returns SELECT query as a list
+    
+    Parameters
+    ----------
+    column (str): Column name for WHERE clause
+                  Default = None
+    value (str): Value for WHERE clause
+                  Defaul = None
+
+    Executes a SELECT query against DATABASE_FILE and returns data into a list
+    """
     connection = sqlite3.connect(DATABASE_FILE)
     cursor = connection.cursor()
     if column != None and value != None:
@@ -55,7 +99,7 @@ def select_device(column=None, value=None) -> list:
 
 
 def main(args):
-
+    """Script mode"""
     action = 'SELECT'
     column = None
     value = None
@@ -75,7 +119,7 @@ def main(args):
                 label = args[1]
                 location = args[2]
                 serial = args[3]
-                ip = args[4]
+                host = args[4]
                 mac = args[5]
             except IndexError as error:
                 exit(f'Missing positional argument is causing: {error}')
@@ -89,7 +133,7 @@ def main(args):
         insert_device(label=label,
                       location=location,
                       serial=serial,
-                      ip=ip,
+                      host=host,
                       mac=mac)
 
 
