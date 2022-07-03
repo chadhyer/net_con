@@ -3,4 +3,5 @@ test.py
 __pycache__/
 device.db
 login.html
-rsa_private_key
+id_rsa
+id_rsa.pub
